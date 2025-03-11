@@ -1,4 +1,4 @@
-import os  # To set environment variables
+import os  import os
 os.environ["OMP_NUM_THREADS"] = "1"  # Fixes signal error for XGBoost
 
 import streamlit as st
@@ -6,39 +6,47 @@ import pickle
 import numpy as np
 import pandas as pd
 
+# Custom CSS for Modern UI
+st.markdown("""
+    <style>
+        /* General Settings */
+        body { background-color: #1e1e2f; color: #cfcfcf; font-family: 'Poppins', sans-serif; }
+        .sidebar .sidebar-content { background-color: #252633; }
+        .stButton > button { background-color: #5c7cfa; border-radius: 8px; }
+        .stButton > button:hover { background-color: #4263eb; }
+        .stProgress > div > div { background-color: #5c7cfa; }
+        .stMetric { background-color: #252633; padding: 10px; border-radius: 8px; }
+        .stMetric > div > div > div { color: #fff; }
+        .card { background-color: #2e2f3e; padding: 20px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); }
+        .stDataFrame { background-color: #2e2f3e; border-radius: 8px; }
+    </style>
+""", unsafe_allow_html=True)
+
 # Load the trained model
-try:
-    with open("./stroke_risk_model.pkl", "rb") as file:
-        model = pickle.load(file)
-    st.success("Model loaded successfully!")
-except FileNotFoundError:
-    st.error("Model file not found. Please check the file path.")
+with open("./stroke_risk_model.pkl", "rb") as file:
+    model = pickle.load(file)
 
 # Load the scaler for input standardization
-try:
-    with open("./scaler.pkl", "rb") as file:
-        scaler = pickle.load(file)
-    st.success("Scaler loaded successfully!")
-except FileNotFoundError:
-    st.error("Scaler file not found. Please check the file path.")
+with open("./scaler.pkl", "rb") as file:
+    scaler = pickle.load(file)
 
-# Web App Title
 st.title("💖 Stroke Risk Prediction App")
 st.markdown("### Simplified and Personalized Stroke Risk Assessment")
 
-# Collect User Input
-st.sidebar.header("Enter Your Details:")
-gender = st.sidebar.radio("Gender:", ["Male", "Female"])
-age = st.sidebar.slider("Age:", 0, 100, 25)
-heart_disease = st.sidebar.radio("Do you have heart disease?", ["Yes", "No"])
-hypertension = st.sidebar.radio("Do you have hypertension?", ["Yes", "No"])
-previous_stroke = st.sidebar.radio("Have you had a stroke before?", ["Yes", "No"])
-avg_glucose_level = st.sidebar.slider("Average Glucose Level:", 0.0, 300.0, 100.0)
-bmi = st.sidebar.slider("BMI:", 0.0, 60.0, 25.0)
-smoking_status = st.sidebar.selectbox("Smoking Status:", ["never smoked", "formerly smoked", "smokes"])
-ever_married = st.sidebar.radio("Have you ever been married?", ["Yes", "No"])
-residence_type = st.sidebar.radio("Residence Type:", ["Urban", "Rural"])
-work_type = st.sidebar.selectbox("Work Type:", ["Never_worked", "Private", "Self-employed", "children"])
+# Sidebar for user input
+with st.sidebar:
+    st.header("Enter Your Details:")
+    gender = st.radio("Gender:", ["Male", "Female"])
+    age = st.slider("Age:", 0, 100, 25)
+    heart_disease = st.radio("Do you have heart disease?", ["Yes", "No"])
+    hypertension = st.radio("Do you have hypertension?", ["Yes", "No"])
+    previous_stroke = st.radio("Have you had a stroke before?", ["Yes", "No"])
+    avg_glucose_level = st.slider("Average Glucose Level:", 0.0, 300.0, 100.0)
+    bmi = st.slider("BMI:", 0.0, 60.0, 25.0)
+    smoking_status = st.selectbox("Smoking Status:", ["never smoked", "formerly smoked", "smokes"])
+    ever_married = st.radio("Have you ever been married?", ["Yes", "No"])
+    residence_type = st.radio("Residence Type:", ["Urban", "Rural"])
+    work_type = st.selectbox("Work Type:", ["Never_worked", "Private", "Self-employed", "children"])
 
 # Encode user input
 def encode_input():
@@ -78,59 +86,25 @@ def encode_input():
 
     return np.array(features).reshape(1, -1)
 
-# Encode and predict
 user_input = encode_input()
+user_input = scaler.transform(user_input)
 
-# Standardize the user input using the loaded scaler
-try:
-    user_input = scaler.transform(user_input)
-except Exception as e:
-    st.error(f"Error in scaling input: {e}")
+risk_score = model.predict_proba(user_input)[0][1]
+risk_percentage = risk_score * 100
 
-# Define the expected feature columns based on the user input encoding
-feature_columns = [
-    "gender", "age", "hypertension", "heart_disease", "previous_stroke", "ever_married", "Residence_type",
-    "avg_glucose_level", "bmi",
-    "smoking_status_formerly smoked", "smoking_status_never smoked", "smoking_status_smokes",
-    "work_type_Never_worked", "work_type_Private", "work_type_Self-employed", "work_type_children"
-]
+st.markdown("### 🩺 Your Risk Score:")
+st.metric(label="Stroke Risk", value=f"{risk_percentage:.2f}%", delta=None)
 
-# Create DataFrame for user input
-user_input_df = pd.DataFrame(user_input, columns=feature_columns)
+st.progress(risk_score)
 
-# Predict risk score
-try:
-    risk_score = model.predict_proba(user_input)[0][1]
-    risk_percentage = risk_score * 100
-    st.write(f"### 🩺 Your Risk Score: **{risk_percentage:.2f}%**")
+# Recommendations
+st.markdown("### Recommendations:")
+if risk_score < 0.3:
+    st.success("Low Risk: Maintain a healthy lifestyle.")
+elif risk_score < 0.6:
+    st.warning("Medium Risk: Consider lifestyle improvements.")
+else:
+    st.error("High Risk: Consult a healthcare provider immediately.")
 
-    # Progress bar based on risk score
-    st.progress(risk_score)
-
-    # Determine risk category
-    if risk_score < 0.3:
-        st.success("You are at **Low Risk** for stroke. Keep up the healthy habits!")
-        st.write("✅ **Recommendations:**")
-        st.write("- Maintain regular physical activity (150 mins/week).")
-        st.write("- Follow a balanced diet (low sodium, rich in fruits and vegetables).")
-        st.write("- Keep regular health checkups for blood pressure and cholesterol.")
-    elif risk_score < 0.6:
-        st.warning("You are at **Medium Risk** for stroke. Consider making lifestyle improvements.")
-        st.write("⚠️ **Recommendations:**")
-        st.write("- Increase physical activity: Aim for 30 minutes of exercise, 5 days a week.")
-        st.write("- Quit smoking: Seek support or resources.")
-        st.write("- Monitor cholesterol and blood pressure regularly.")
-    else:
-        st.error("You are at **High Risk** for stroke. Take immediate action.")
-        st.write("🚨 **Recommendations:**")
-        st.write("- Consult a healthcare provider immediately.")
-        st.write("- Implement lifestyle changes: Quit smoking, reduce salt intake.")
-        st.write("- Increase physical activity to manage weight and cardiovascular health.")
-        st.write("- Consider medication for blood pressure and cholesterol if advised.")
-except Exception as e:
-    st.error(f"Error in model prediction: {e}")
-
-# Footer
 st.markdown("---")
 st.markdown("📋 **Note:** This prediction is based on the data provided and is not a substitute for professional medical advice.")
-
