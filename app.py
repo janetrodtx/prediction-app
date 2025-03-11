@@ -1,10 +1,11 @@
-import os  import os
+import os  # Add this line to limit threads for XGBoost
 os.environ["OMP_NUM_THREADS"] = "1"  # Fixes signal error for XGBoost
 
 import streamlit as st
 import pickle
 import numpy as np
 import pandas as pd
+
 
 # Custom CSS for Modern UI
 st.markdown("""
