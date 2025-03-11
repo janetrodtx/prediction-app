@@ -23,13 +23,12 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Load the trained model
-with open("./stroke_risk_model.pkl", "rb") as file:
+with open("./models/stroke_risk_model.pkl", "rb") as file:
     model = pickle.load(file)
 
-# Load the scaler for input standardization
-with open("./scaler.pkl", "rb") as file:
+with open("./models/scaler.pkl", "rb") as file:
     scaler = pickle.load(file)
+
 
 st.title("💖 Stroke Risk Prediction App")
 st.markdown("### Simplified and Personalized Stroke Risk Assessment")
