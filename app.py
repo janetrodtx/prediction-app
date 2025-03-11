@@ -1,15 +1,22 @@
-from flask import Flask, render_template, request
+import os  # Add this line to limit threads for XGBoost
+os.environ["OMP_NUM_THREADS"] = "1"  # Fixes signal error
+
+import streamlit as st
 import pickle
 import numpy as np
+import pandas as pd
 
-app = Flask(__name__)
+# Load the trained model
+with open("stroke_risk_model.pkl", "rb") as file:
+    model = pickle.load(file)
 
-# Load trained model and scaler
-with open("models/stroke_risk_model.pkl", "rb") as model_file:
-    model = pickle.load(model_file)
+# Load the scaler for input standardization
+with open("scaler.pkl", "rb") as file:
+    scaler = pickle.load(file)
 
-with open("models/scaler.pkl", "rb") as scaler_file:
-    scaler = pickle.load(scaler_file)
+st.title("Stroke Risk Prediction App")
+st.markdown("### Simplified and Personalized Stroke Risk Assessment")
+
 
 # Route for the home page
 @app.route("/", methods=["GET", "POST"])
