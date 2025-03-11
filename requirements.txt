@@ -21,7 +21,8 @@ click==8.1.3
 colorama==0.4.6
 contourpy==1.0.5
 cycler==0.11.0
-flask==2.2.2
+flask==2.0.3  # Downgraded to fix url_quote issue
+werkzeug==2.0.3  # Downgraded to fix url_quote issue
 geopandas==0.12.1
 geopy==2.3.0
 imbalanced-learn==0.9.1
