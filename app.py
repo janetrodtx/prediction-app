@@ -155,9 +155,10 @@ st.markdown(
             padding: 10px;
         }
     </style>
-    """,
+    """,  # ✅ Ensure this closing triple quote exists
     unsafe_allow_html=True
 )
+
 
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
