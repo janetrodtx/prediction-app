@@ -4,118 +4,73 @@ import pandas as pd
 # Load the dataset
 df = pd.read_csv("expanded_hair_issues.csv")
 
-# --- 🎨 Custom Styling (Black Background & White Text) ---
-st.markdown(
-    """
-    <style>
-        /* Set the full page background to black */
-        body, .stApp {
-            background-color: black;
-            color: white;
-        }
-        /* Change headers and labels to white */
-        h1, h2, h3, .stSelectbox label, .stRadio label, .stNumberInput label, .stTextInput label {
-            color: white;
-            text-align: center;
-            font-family: 'Arial', sans-serif;
-        }
-        /* Style the numbers and dropdowns */
-        .stNumberInput input, .stSelectbox select {
-            color: white !important;
-            background-color: black !important;
-        }
-        /* Style the buttons */
-        .magic-button {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: #FFD700; /* Gold */
-            padding: 15px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            color: black; /* Black text for contrast */
-            cursor: pointer;
-            transition: 0.3s;
-            border: 2px solid white;
-        }
-        .magic-button:hover {
-            background: #FFA500; /* Orange hover effect */
-            color: white;
-        }
-        /* Style the warning message */
-        .stAlert {
-            background-color: black;
-            color: white;
-            border: 2px solid #FFD700;
-        }
-        /* Glowing effect */
-        .glow {
-            text-align: center;
-            color: #FFD700;
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 0px 0px 10px #FFA500;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Initialize session state
+if "step" not in st.session_state:
+    st.session_state.step = 1
 
-# --- 🔥 Logo & Title ---
-st.image("Screenshot 2025-03-11 221723.png", width=200)
-st.title("⚡Welcome to Hi Voltage Vibes!⚡")
-st.write("Your **magical** hair care recommendation guide! Answer a few questions and discover the perfect products.")
+# Function to go to the next step
+def next_step():
+    st.session_state.step += 1
 
-# --- 📝 User Input ---
-st.subheader("🔍 What's your hair concern?")
-hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
+# Function to go back
+def go_back():
+    st.session_state.step -= 1
 
-st.subheader("💰 What's your budget?")
-budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & up"])  # Normalized lowercase "up"
+# --- Step 1: Welcome Page ---
+if st.session_state.step == 1:
+    st.title("⚡Welcome to Hi Voltage Hair-Care!⚡")
+    st.write("Find the best hair care routine for you by answering a few quick questions.")
+    if st.button("Get Started"):
+        next_step()
 
-# --- 🔄 Ensure Budget Formatting Consistency ---
-df["Budget"] = df["Budget"].str.lower().str.strip()
-budget = budget.lower().strip()  # Convert user input to lowercase
+# --- Step 2: Choose Hair Concern ---
+elif st.session_state.step == 2:
+    st.subheader("🔍 What's your hair concern?")
+    hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
+    st.session_state.hair_issue = hair_issue  # Store choice in session state
+    if st.button("Next"):
+        next_step()
+    if st.button("Back"):
+        go_back()
 
-# --- 🎯 Process Selection ---
-result = df[(df["Issue"] == hair_issue) & (df["Budget"] == budget)]
-
-if not result.empty:
-    st.subheader(f"✨ Your Hair Fix for **{hair_issue}** ✨")
-    st.write(f"📖 **Definition:** {result.iloc[0]['Definition']}")
-    st.write(f"⚠️ **Cause:** {result.iloc[0]['Cause']}")
-    st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
+# --- Step 3: Show Cause & Solution ---
+elif st.session_state.step == 3:
+    issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
+    st.subheader(f"💡 Understanding **{issue_data['Issue']}**")
+    st.write(f"📖 **Definition:** {issue_data['Definition']}")
+    st.write(f"⚠️ **Cause:** {issue_data['Cause']}")
+    st.write(f"💡 **Solution:** The right hair care routine can help manage this issue.")
     
-    # Extract product name and link
-    product_info = result.iloc[0]['Recommended Product & Link']
-    product_name = product_info.split('](')[0][1:]  # Extracts text inside [ ]
-    product_link = product_info.split('](')[1][:-1]  # Extracts URL inside ( )
+    if st.button("Next"):
+        next_step()
+    if st.button("Back"):
+        go_back()
 
-    # Styled Button for Product Purchase
-    st.markdown(f'<a class="magic-button" href="{product_link}" target="_blank">🛍 Buy {product_name} Now</a>', unsafe_allow_html=True)
-else:
-    st.warning("❌ No product found for the selected budget.")
+# --- Step 4: Select Budget ---
+elif st.session_state.step == 4:
+    st.subheader("💰 What's your budget?")
+    budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & Up"])
+    st.session_state.budget = budget  # Store budget selection
+    if st.button("See My Product Recommendation"):
+        next_step()
+    if st.button("Back"):
+        go_back()
 
-# --- 📲 Hi Voltage Vibes Blog & Socials ---
-st.markdown("---")
-st.subheader("⚡ **Hi Voltage Vibes Blog** ⚡")
-st.write("Check out our latest tips, product reviews, and magical hair care secrets!")
-st.markdown(
-    '<a class="magic-button" href="https://your-blog-url.com" target="_blank">📖 Visit Blog</a>',
-    unsafe_allow_html=True
-)
+# --- Step 5: Show Product Recommendation ---
+elif st.session_state.step == 5:
+    result = df[(df["Issue"] == st.session_state.hair_issue) & (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())]
+    
+    if not result.empty:
+        st.subheader(f"✨ Your Hair Fix for **{st.session_state.hair_issue}** ✨")
+        st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
+        product_info = result.iloc[0]['Recommended Product & Link']
+        product_name = product_info.split('](')[0][1:]  # Extract text inside [ ]
+        product_link = product_info.split('](')[1][:-1]  # Extract URL inside ( )
 
-st.subheader("✨ Let's Stay Connected! ✨")
-st.markdown(
-    """
-    <p style="text-align:center;">
-        <a href="https://www.instagram.com/hivoltagevisuals/">📸 Instagram</a> |
-        <a href="https://tiktok.com" target="_blank">🎵 TikTok</a>
-    </p>
-    """,
-    unsafe_allow_html=True
-)
+        st.markdown(f'[🛍 Buy {product_name} Now]({product_link})', unsafe_allow_html=True)
+    else:
+        st.warning("❌ No product found for the selected budget.")
+    
+    if st.button("Start Over"):
+        st.session_state.step = 1
 
-st.markdown("---")
-st.markdown('<p class="glow">Powered by Hi Voltage Vibes ⚡</p>', unsafe_allow_html=True)
