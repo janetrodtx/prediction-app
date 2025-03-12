@@ -16,9 +16,33 @@ def next_step():
 def go_back():
     st.session_state.step -= 1
 
+# --- 🎨 Custom Styling for Dark Mode ---
+st.markdown(
+    """
+    <style>
+        body, .stApp {
+            background-color: black;
+            color: white;
+        }
+        h1, h2, h3, .stSelectbox label, .stRadio label {
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        .stButton button {
+            background-color: #FFD700;
+            color: black;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 10px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
-    st.title("⚡Welcome to Hi Voltage Hair-Care!⚡")
+    st.title("⚡ Welcome to Hi Voltage Hair Care! ⚡")
     st.write("Find the best hair care routine for you by answering a few quick questions.")
     if st.button("Get Started"):
         next_step()
@@ -56,21 +80,29 @@ elif st.session_state.step == 4:
     if st.button("Back"):
         go_back()
 
-# --- Step 5: Show Product Recommendation ---
+# --- Step 5: Show Product Recommendations ---
 elif st.session_state.step == 5:
     result = df[(df["Issue"] == st.session_state.hair_issue) & (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())]
-    
-    if not result.empty:
-        st.subheader(f"✨ Your Hair Fix for **{st.session_state.hair_issue}** ✨")
-        st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
-        product_info = result.iloc[0]['Recommended Product & Link']
-        product_name = product_info.split('](')[0][1:]  # Extract text inside [ ]
-        product_link = product_info.split('](')[1][:-1]  # Extract URL inside ( )
 
-        st.markdown(f'[🛍 Buy {product_name} Now]({product_link})', unsafe_allow_html=True)
+    if not result.empty:
+        st.subheader(f"✨ Recommended Products for **{st.session_state.hair_issue}** ✨")
+        st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
+
+        # Extract product recommendations and format them
+        product_list = result.iloc[0]['Recommended Product & Link'].split(", ")
+        
+        for product in product_list:
+            if "](" in product:
+                product_name = product.split('](')[0][1:]  # Extract text inside [ ]
+                product_link = product.split('](')[1][:-1]  # Extract URL inside ( )
+                st.markdown(f"🔹 **{product_name}** – [Buy Here]({product_link})", unsafe_allow_html=True)
+            else:
+                st.write(f"🔹 {product}")  # If no link, display as plain text
+
     else:
         st.warning("❌ No product found for the selected budget.")
-    
+
     if st.button("Start Over"):
         st.session_state.step = 1
+
 
