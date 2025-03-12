@@ -49,15 +49,16 @@ st.markdown(
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
     st.image("Screenshot 2025-03-11 221723.png", width=250)  # ✅ Logo added
-    st.title("⚡ Welcome to Hi Voltage Visuals – Hair Care Edition! ⚡")
-    st.write("Find the best hair care routine for you by answering a few quick questions.")
+    st.title("Welcome to Hi Voltage Visuals:")
+    st.title("Hair Care Edition⚡")
+    st.write("✨Find the best hair care recommendations for your budget by answering a few quick questions✨")
     if st.button("Get Started"):
         next_step()
 
 # --- Step 2: Choose Hair Concern ---
 elif st.session_state.step == 2:
     st.subheader("🔍 What's your hair concern?")
-    hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
+    hair_issue = st.selectbox("Choose your hair issue with the dropdown menu:", df["Issue"].unique())
     st.session_state.hair_issue = hair_issue  # Store choice in session state
     if st.button("Next"):
         next_step()
@@ -121,5 +122,4 @@ elif st.session_state.step == 5:
 
     if st.button("Start Over"):
         st.session_state.step = 1
-
 
