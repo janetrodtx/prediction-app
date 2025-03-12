@@ -59,7 +59,7 @@ st.markdown(
 
 # --- 🔥 Logo & Title ---
 st.image("Screenshot 2025-03-11 221723.png", width=200)
-st.title("'<p class="glow">⚡Welcome to Hi Voltage Vibes!⚡</p>'")
+st.title("⚡Welcome to Hi Voltage Vibes!⚡")
 st.write("Your **magical** hair care recommendation guide! Answer a few questions and discover the perfect products.")
 
 # --- 📝 User Input ---
