@@ -49,7 +49,7 @@ st.markdown(
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
     st.image("Screenshot 2025-03-11 221723.png", width=250)  # ✅ Logo added
-    st.title("⚡Welcome to Hi Voltage Visuals – Hair Care Edition⚡")
+    st.title("Welcome to Hi Voltage Visuals – Hair Care Edition⚡")
     st.write("✨Find the best hair care routine for you by answering a few quick questions✨")
     if st.button("Get Started"):
         next_step()
