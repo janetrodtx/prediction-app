@@ -110,8 +110,7 @@ st.subheader("✨ Let's Stay Connected! ✨")
 st.markdown(
     """
     <p style="text-align:center;">
-        <a href="https://instagram.com" target="_blank">📸 Instagram</a> |
-        <a href="https://facebook.com" target="_blank">📘 Facebook</a> |
+        <a href="https://www.instagram.com/hivoltagevisuals/">📸 Instagram</a> |
         <a href="https://tiktok.com" target="_blank">🎵 TikTok</a>
     </p>
     """,
