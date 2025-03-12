@@ -59,7 +59,7 @@ st.markdown(
 
 # --- 🔥 Logo & Title ---
 st.image("Screenshot 2025-03-11 221723.png", width=200)
-st.title("⚡ Welcome to Hi Voltage Vibes! ⚡")
+st.title("<p class="glow">⚡Welcome to Hi Voltage Vibes!⚡</p>")
 st.write("Your **magical** hair care recommendation guide! Answer a few questions and discover the perfect products.")
 
 # --- 📝 User Input ---
@@ -67,7 +67,7 @@ st.subheader("🔍 What's your hair concern?")
 hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
 
 st.subheader("💰 What's your budget?")
-budget = st.radio("Select your budget:", ["Under $25", "$25-$50", "$75 & up"])
+budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & Up"])
 
 # --- 🎯 Process Selection ---
 result = df[(df["Issue"] == hair_issue) & (df["Budget"] == budget)]
@@ -108,10 +108,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-st.markdown("---")
-st.markdown('<p class="glow">Powered by Hi Voltage Vibes ⚡</p>', unsafe_allow_html=True)
-
 
 st.markdown("---")
 st.markdown('<p class="glow">Powered by Hi Voltage Vibes ⚡</p>', unsafe_allow_html=True)
