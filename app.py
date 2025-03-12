@@ -31,6 +31,9 @@ st.markdown(
             color: white;
             font-family: 'Arial', sans-serif;
         }
+        .stRadio div {
+            color: white !important;  /* ✅ Fixes budget text visibility */
+        }
         .stButton button {
             background-color: #FFD700;
             color: black;
@@ -45,7 +48,8 @@ st.markdown(
 
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
-    st.title("⚡ Welcome to Hi Voltage Hair Care! ⚡")
+    st.image("Screenshot 2025-03-11 221723.png", width=250)  # ✅ Logo added
+    st.title("⚡ Welcome to Hi Voltage Visuals – Hair Care Edition! ⚡")
     st.write("Find the best hair care routine for you by answering a few quick questions.")
     if st.button("Get Started"):
         next_step()
