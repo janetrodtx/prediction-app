@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # ✅ Load the latest dataset
-df = pd.read_csv("expanded_hair_issues_updated.csv")
+df = pd.read_csv("Updated_Hair_Issues_Dataset.csv")
 
 # ✅ Ensure column names are clean
 df.columns = df.columns.str.strip()
