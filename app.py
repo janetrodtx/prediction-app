@@ -60,15 +60,20 @@ elif st.session_state.step == 2:
 # --- Step 3: Show Cause & Solution ---
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
+    
     st.subheader(f"💡 Understanding **{issue_data['Issue']}**")
     st.write(f"📖 **Definition:** {issue_data['Definition']}")
     st.write(f"⚠️ **Cause:** {issue_data['Cause']}")
-    st.write(f"💡 **Solution:** The right hair care routine can help manage this issue.")
+
+    # Add Solution section
+    st.write("🛠 **Solution:**")
+    st.write(issue_data["Solution"])  # Display the solution from the dataset
     
     if st.button("Next"):
         next_step()
     if st.button("Back"):
         go_back()
+
 
 # --- Step 4: Select Budget ---
 elif st.session_state.step == 4:
