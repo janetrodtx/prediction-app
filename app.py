@@ -51,7 +51,7 @@ st.markdown(
 )
 
 # --- 🔥 Logo & Title ---
-st.image(r"C:\Users\13615\Pictures\Screenshots\Screenshot 2025-03-11 221723.png", width=200)
+st.image("Screenshot 2025-03-11 221723.png", width=200)
 st.title("⚡Welcome to Hi Voltage Vibes!⚡")
 st.write("Your **magical** hair care recommendation guide! Answer a few questions and discover the perfect products.")
 
