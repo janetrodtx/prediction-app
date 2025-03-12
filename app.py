@@ -4,22 +4,22 @@ import pandas as pd
 # Load the dataset
 df = pd.read_csv("expanded_hair_issues.csv")
 
-# --- 🎨 Custom Styling (Black Background & White Text) ---
+# --- 🎨 Custom Styling ---
 st.markdown(
     """
     <style>
-        /* Set the full page background to black */
-        body, .stApp {
+        body {
             background-color: black;
-            color: white;
         }
-        /* Change headers and labels to white */
-        h1, h2, h3, .stSelectbox label, .stRadio label {
-            color: white;
+        .main {
+            background-color: black;
+            color: black;
+        }
+        h1, h2, h3 {
             text-align: center;
-            font-family: 'Arial', sans-serif;
+            color: #FFD700; /* Gold */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
-        /* Style the buttons */
         .magic-button {
             display: block;
             width: 100%;
@@ -38,13 +38,6 @@ st.markdown(
             background: #FFA500; /* Orange hover effect */
             color: white;
         }
-        /* Style the warning message */
-        .stAlert {
-            background-color: black;
-            color: white;
-            border: 2px solid #FFD700;
-        }
-        /* Glowing effect */
         .glow {
             text-align: center;
             color: #FFD700;
@@ -58,7 +51,7 @@ st.markdown(
 )
 
 # --- 🔥 Logo & Title ---
-st.image("Screenshot 2025-03-11 221723.png", width=200)
+st.image(r"C:\Users\13615\Pictures\Screenshots\Screenshot 2025-03-11 221723.png", width=200)
 st.title("⚡Welcome to Hi Voltage Vibes!⚡")
 st.write("Your **magical** hair care recommendation guide! Answer a few questions and discover the perfect products.")
 
@@ -67,7 +60,7 @@ st.subheader("🔍 What's your hair concern?")
 hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
 
 st.subheader("💰 What's your budget?")
-budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & Up"])
+budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & up"])
 
 # --- 🎯 Process Selection ---
 result = df[(df["Issue"] == hair_issue) & (df["Budget"] == budget)]
