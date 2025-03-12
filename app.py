@@ -4,22 +4,22 @@ import pandas as pd
 # Load the dataset
 df = pd.read_csv("expanded_hair_issues.csv")
 
-# --- 🎨 Custom Styling ---
+# --- 🎨 Custom Styling (Black Background & White Text) ---
 st.markdown(
     """
     <style>
-        body {
+        /* Set the full page background to black */
+        body, .stApp {
             background-color: black;
+            color: white;
         }
-        .main {
-            background-color: black;
-            color: black;
-        }
+        /* Change headers to white */
         h1, h2, h3 {
+            color: white;
             text-align: center;
-            color: #FFD700; /* Gold */
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
+        /* Style the buttons */
         .magic-button {
             display: block;
             width: 100%;
@@ -38,6 +38,13 @@ st.markdown(
             background: #FFA500; /* Orange hover effect */
             color: white;
         }
+        /* Style the warning message */
+        .stAlert {
+            background-color: black;
+            color: white;
+            border: 2px solid #FFD700;
+        }
+        /* Glowing effect */
         .glow {
             text-align: center;
             color: #FFD700;
@@ -52,7 +59,7 @@ st.markdown(
 
 # --- 🔥 Logo & Title ---
 st.image("Screenshot 2025-03-11 221723.png", width=200)
-st.title("⚡Welcome to Hi Voltage Vibes!⚡")
+st.title("⚡ Welcome to Hi Voltage Vibes! ⚡")
 st.write("Your **magical** hair care recommendation guide! Answer a few questions and discover the perfect products.")
 
 # --- 📝 User Input ---
@@ -60,7 +67,7 @@ st.subheader("🔍 What's your hair concern?")
 hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
 
 st.subheader("💰 What's your budget?")
-budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & up"])
+budget = st.radio("Select your budget:", ["Under $25", "$25-$50", "$75 & up"])
 
 # --- 🎯 Process Selection ---
 result = df[(df["Issue"] == hair_issue) & (df["Budget"] == budget)]
@@ -101,6 +108,10 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+st.markdown("---")
+st.markdown('<p class="glow">Powered by Hi Voltage Vibes ⚡</p>', unsafe_allow_html=True)
+
 
 st.markdown("---")
 st.markdown('<p class="glow">Powered by Hi Voltage Vibes ⚡</p>', unsafe_allow_html=True)
