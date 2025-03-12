@@ -13,8 +13,8 @@ st.markdown(
             background-color: black;
             color: white;
         }
-        /* Change headers to white */
-        h1, h2, h3 {
+        /* Change headers and labels to white */
+        h1, h2, h3, .stSelectbox label, .stRadio label {
             color: white;
             text-align: center;
             font-family: 'Arial', sans-serif;
