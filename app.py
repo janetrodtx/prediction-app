@@ -1,19 +1,16 @@
 import streamlit as st
 import pandas as pd
 
-# Load the dataset
-df = pd.read_csv("import streamlit as st
-import pandas as pd
+# ✅ Load the latest dataset
+df = pd.read_csv("expanded_hair_issues_updated.csv")
 
-# Load the dataset
-df = pd.read_csv("Updated_Hair_Issues_Dataset.csv")
-
-# Ensure column names are clean (removes hidden spaces)
+# ✅ Ensure column names are clean
 df.columns = df.columns.str.strip()
 
-# Initialize session state
+# ✅ Initialize session state
 if "step" not in st.session_state:
     st.session_state.step = 1
+
 
 # Function to go to the next step
 def next_step():
