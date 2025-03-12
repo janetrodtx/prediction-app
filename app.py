@@ -14,10 +14,15 @@ st.markdown(
             color: white;
         }
         /* Change headers and labels to white */
-        h1, h2, h3, .stSelectbox label, .stRadio label {
+        h1, h2, h3, .stSelectbox label, .stRadio label, .stNumberInput label, .stTextInput label {
             color: white;
             text-align: center;
             font-family: 'Arial', sans-serif;
+        }
+        /* Style the numbers and dropdowns */
+        .stNumberInput input, .stSelectbox select {
+            color: white !important;
+            background-color: black !important;
         }
         /* Style the buttons */
         .magic-button {
@@ -67,7 +72,11 @@ st.subheader("🔍 What's your hair concern?")
 hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
 
 st.subheader("💰 What's your budget?")
-budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & Up"])
+budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & up"])  # Normalized lowercase "up"
+
+# --- 🔄 Ensure Budget Formatting Consistency ---
+df["Budget"] = df["Budget"].str.lower().str.strip()
+budget = budget.lower().strip()  # Convert user input to lowercase
 
 # --- 🎯 Process Selection ---
 result = df[(df["Issue"] == hair_issue) & (df["Budget"] == budget)]
