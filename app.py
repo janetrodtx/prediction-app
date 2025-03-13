@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # ✅ Load the latest dataset
-df = pd.read_csv("Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv")
+df = pd.read_csv("Updated_Hair_Issues_Dataset_Cleaned.csv")
 
 # ✅ Ensure column names are clean
 df.columns = df.columns.str.strip()
@@ -107,17 +107,18 @@ elif st.session_state.step == 5:
         st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
 
         # Extract and display recommended products properly
-product_text = result.iloc[0]['Recommended Product & Link']  # Get full product string
+        product_text = result.iloc[0]['Recommended Product & Link']  # Get full product string
 
-# Ensure proper formatting and display
-if "](" in product_text:  # Check if there are links in the string
-    formatted_products = product_text.replace(", ", "\n🔹 ")  # Add bullet points correctly
-    st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
-else:
-    st.write(f"🔹 {product_text}")  # If no links, display as plain text
+        # Ensure proper formatting and display
+        if "](" in product_text:  # Check if there are links in the string
+            formatted_products = product_text.replace(", ", "\n🔹 ")  # Add bullet points correctly
+            st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
+        else:
+            st.write(f"🔹 {product_text}")  # If no links, display as plain text
 
-else:
-    st.warning("❌ No product found for the selected budget.")
+    else:
+        st.warning("❌ No product found for the selected budget.")
 
     if st.button("Start Over"):
         st.session_state.step = 1
+
