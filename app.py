@@ -115,8 +115,8 @@ elif st.session_state.step == 5:
             st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
         else:
             st.markdown(f"🔹 **{product_name}** – [🛍 Buy Here]({product_link})", unsafe_allow_html=True)
-            else:
-                st.write(f"🔹 {product}")  # If no link, display as plain text
+        else:
+            st.write(f"🔹 {product}")  # If no link, display as plain text
                 
     if st.button("Start Over"):
         st.session_state.step = 1
