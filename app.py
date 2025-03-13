@@ -105,7 +105,7 @@ elif st.session_state.step == 5:
     if not result.empty:
         st.subheader(f"✨ Recommended Products for **{st.session_state.hair_issue}** ✨")
         st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
-        st.write("🛍 Click the Link to Purchase")
+        st.write(f"🛍 Click the Link to Purchase")
         # Extract and display recommended products properly
         product_text = result.iloc[0]['Recommended Product & Link']  # Get full product string
 
