@@ -106,19 +106,18 @@ elif st.session_state.step == 5:
         st.subheader(f"✨ Recommended Products for **{st.session_state.hair_issue}** ✨")
         st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
 
-        # Extract product recommendations and format them
-        product_list = result.iloc[0]['Recommended Product & Link'].split(", ")
-        
-        for product in product_list:
-            if "](" in product:
-                product_name = product.split('](')[0][1:]  # Extract text inside [ ]
-                product_link = product.split('](')[1][:-1]  # Extract URL inside ( )
-                st.markdown(f"🔹 **{product_name}** – [🛍 Buy Here]({product_link})", unsafe_allow_html=True)
-            else:
-                st.write(f"🔹 {product}")  # If no link, display as plain text
+        # Extract and display recommended products properly
+product_text = result.iloc[0]['Recommended Product & Link']  # Get full product string
 
-    else:
-        st.warning("❌ No product found for the selected budget.")
+# Ensure proper formatting and display
+if "](" in product_text:  # Check if there are links in the string
+    formatted_products = product_text.replace(", ", "\n🔹 ")  # Add bullet points correctly
+    st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
+else:
+    st.write(f"🔹 {product_text}")  # If no links, display as plain text
+
+else:
+    st.warning("❌ No product found for the selected budget.")
 
     if st.button("Start Over"):
         st.session_state.step = 1
