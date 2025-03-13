@@ -114,11 +114,10 @@ elif st.session_state.step == 5:
             formatted_products = product_text.replace(", ", "\n🔹 ")  # Add bullet points correctly
             st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
         else:
-            st.write(f"🔹 {product_text}")  # If no links, display as plain text
-
-    else:
-        st.warning("❌ No product found for the selected budget.")
-
+            st.markdown(f"🔹 **{product_name}** – [🛍 Buy Here]({product_link})", unsafe_allow_html=True)
+            else:
+                st.write(f"🔹 {product}")  # If no link, display as plain text
+                
     if st.button("Start Over"):
         st.session_state.step = 1
 
