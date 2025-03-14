@@ -52,13 +52,6 @@ if st.session_state.step == 1:
     st.title("Welcome to Hi Voltage Visuals:")
     st.title("Hair Care Edition⚡")
     st.write("✨Find the best hair care recommendations for your budget by answering a few quick questions✨")
-
-    # Add a button linking to Canva
-    st.markdown(
-        '<a href="https://www.canva.com/design/DAGho8qhctc/23YwUzPGRMC1ixptB2JEqA/view?utm_content=DAGho8qhctc&utm_campaign=designshare&utm_medium=embeds&utm_source=link" target="_blank" style="display: block; text-align: center; background: #FFD700; padding: 10px; border-radius: 10px; font-size: 16px; font-weight: bold; color: black; text-decoration: none;">📌 View Canva Design</a>',
-        unsafe_allow_html=True
-    )
-
     if st.button("Get Started"):
         next_step()
 
