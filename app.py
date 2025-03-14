@@ -1,11 +1,15 @@
 import streamlit as st
 import pandas as pd
+import os
 
 # ✅ Load the latest dataset
-df = pd.read_csv("Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv")
-
-# ✅ Ensure column names are clean
-df.columns = df.columns.str.strip()
+csv_file = "Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv"
+if os.path.exists(csv_file):
+    df = pd.read_csv(csv_file)
+    df.columns = df.columns.str.strip()  # Ensure column names are clean
+else:
+    st.error("❌ Data file not found. Please upload 'Updated_Hair_Issues_Dataset.csv'.")
+    st.stop()
 
 # ✅ Initialize session state
 if "step" not in st.session_state:
@@ -18,6 +22,13 @@ def next_step():
 # Function to go back
 def go_back():
     st.session_state.step -= 1
+
+# Function to display images safely
+def show_image(image_path):
+    if os.path.exists(image_path):
+        st.image(image_path, use_container_width=True)
+    else:
+        st.warning(f"⚠️ Missing image: {image_path}")
 
 # --- 🎨 Custom Styling for Dark Mode & UI ---
 st.markdown(
@@ -42,11 +53,6 @@ st.markdown(
             border-radius: 8px;
             padding: 10px;
         }
-        .styled-image {
-            display: block;
-            margin: auto;
-            width: 100%;
-        }
     </style>
     """,
     unsafe_allow_html=True
@@ -54,13 +60,13 @@ st.markdown(
 
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
-    st.image("1.png", use_column_width=True)  # ✅ Welcome Screen UI
+    show_image("1.png")  # ✅ Welcome Screen UI
     if st.button("Start"):
         next_step()
 
 # --- Step 2: Choose Hair Concern ---
 elif st.session_state.step == 2:
-    st.image("2.png", use_column_width=True)  # ✅ Hair Concern Selection UI
+    show_image("2.png")  # ✅ Hair Concern Selection UI
     hair_issue = st.selectbox("", df["Issue"].unique())
     st.session_state.hair_issue = hair_issue  # Store choice in session state
     col1, col2 = st.columns(2)
@@ -74,7 +80,7 @@ elif st.session_state.step == 2:
 # --- Step 3: Show Cause & Solution ---
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
-    st.image("4.png", use_column_width=True)  # ✅ Understanding Your Hair UI
+    show_image("4.png")  # ✅ Understanding Your Hair UI
 
     st.markdown(f"<h2 style='text-align: center;'>Understanding {issue_data['Issue']}</h2>", unsafe_allow_html=True)
     st.write(f"📖 **Definition:** {issue_data['Definition']}")
@@ -92,7 +98,7 @@ elif st.session_state.step == 3:
 
 # --- Step 4: Select Budget ---
 elif st.session_state.step == 4:
-    st.image("3.png", use_column_width=True)  # ✅ Budget Selection UI
+    show_image("3.png")  # ✅ Budget Selection UI
     budget = st.radio("", ["Under $25", "$25 & Up", "$75 & Up"])
     st.session_state.budget = budget  # Store budget selection
     col1, col2 = st.columns(2)
@@ -110,7 +116,7 @@ elif st.session_state.step == 5:
         (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())
     ]
 
-    st.image("5.png", use_column_width=True)  # ✅ Product Recommendation UI
+    show_image("5.png")  # ✅ Product Recommendation UI
 
     if not result.empty:
         st.markdown(f"<h2 style='text-align: center;'>Recommended Products for {st.session_state.hair_issue}</h2>", unsafe_allow_html=True)
