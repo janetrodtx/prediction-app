@@ -19,75 +19,34 @@ def next_step():
 def go_back():
     st.session_state.step -= 1
 
-# --- 🎨 Global Styling for a Unified Canva-Inspired Look ---
+# --- 🎨 Custom Styling for Dark Mode & UI ---
 st.markdown(
     """
     <style>
-        /* Dark Mode Background */
         body, .stApp {
             background-color: black;
             color: white;
         }
-
-        /* Centered Layout */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        h1, h2, h3, .stSelectbox label, .stRadio label {
+            color: white;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            max-width: 600px;
-            margin: auto;
         }
-
-        /* Canva-Inspired Box */
-        .box {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%;
-            box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);
-            margin-top: 1.6em;
-            margin-bottom: 0.9em;
-            overflow: hidden;
-            border-radius: 8px;
-            will-change: transform;
+        .stRadio div {
+            color: white !important;  /* ✅ Fixes budget text visibility */
         }
-
-        /* Embedded Iframe */
-        .box iframe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        /* Styled Button */
-        .styled-button {
-            display: inline-block;
-            background: #FFD700;
+        .stButton button {
+            background-color: #FFD700;
             color: black;
             font-weight: bold;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-size: 18px;
-            text-decoration: none;
-            transition: 0.3s;
-            border: 2px solid white;
+            border-radius: 8px;
+            padding: 10px;
         }
-
-        .styled-button:hover {
-            background: #FFA500;
-            color: white;
+        .styled-image {
+            display: block;
+            margin: auto;
+            width: 100%;
         }
-
-        /* Fix for Budget Radio Button Text */
-        .stRadio div {
-            color: white !important;
-        }
-
     </style>
     """,
     unsafe_allow_html=True
@@ -95,82 +54,54 @@ st.markdown(
 
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
-    st.markdown('<div class="container">', unsafe_allow_html=True)
-
-    # Logo
-    st.image("Screenshot 2025-03-11 221723.png", width=250)
-
-    # Title
-    st.markdown("<h1>Welcome to Hi Voltage Visuals:</h1>", unsafe_allow_html=True)
-    st.markdown("<h2>Hair Care Edition ⚡</h2>", unsafe_allow_html=True)
-
-    # Description
-    st.markdown(
-        "<p style='font-size:18px;'>✨Find the best hair care recommendations for your budget by answering a few quick questions✨</p>",
-        unsafe_allow_html=True
-    )
-
-    # Canva-Inspired Embedded Design
-    st.markdown(
-        """
-        <div class="box">
-            <iframe loading="lazy" src="https://www.canva.com/design/DAGho8qhctc/23YwUzPGRMC1ixptB2JEqA/view?embed" allowfullscreen></iframe>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Get Started Button
-    if st.button("Get Started"):
+    st.image("1.png", use_column_width=True)  # ✅ Welcome Screen UI
+    if st.button("Start"):
         next_step()
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Step 2: Choose Hair Concern ---
 elif st.session_state.step == 2:
-    st.markdown('<div class="container">', unsafe_allow_html=True)
-    st.subheader("🔍 What's your hair concern?")
-    hair_issue = st.selectbox("Choose your hair issue:", df["Issue"].unique())
+    st.image("2.png", use_column_width=True)  # ✅ Hair Concern Selection UI
+    hair_issue = st.selectbox("", df["Issue"].unique())
     st.session_state.hair_issue = hair_issue  # Store choice in session state
-    if st.button("Next"):
-        next_step()
-    if st.button("Back"):
-        go_back()
-    st.markdown("</div>", unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Back"):
+            go_back()
+    with col2:
+        if st.button("Next"):
+            next_step()
 
 # --- Step 3: Show Cause & Solution ---
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
+    st.image("4.png", use_column_width=True)  # ✅ Understanding Your Hair UI
 
-    st.markdown('<div class="container">', unsafe_allow_html=True)
-    st.subheader(f"💡 Understanding **{issue_data['Issue']}**")
+    st.markdown(f"<h2 style='text-align: center;'>Understanding {issue_data['Issue']}</h2>", unsafe_allow_html=True)
     st.write(f"📖 **Definition:** {issue_data['Definition']}")
     st.write(f"⚠️ **Cause:** {issue_data['Cause']}")
+    st.write("🛠 **Solution:**")
+    st.write(issue_data["Solution"])
 
-    # Ensure "Solution" exists to prevent errors
-    if "Solution" in df.columns:
-        st.write("🛠 **Solution:**")
-        st.write(issue_data["Solution"])
-    else:
-        st.write("🛠 **Solution:** No solution available. Please update dataset.")
-
-    if st.button("Next"):
-        next_step()
-    if st.button("Back"):
-        go_back()
-    st.markdown("</div>", unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Back"):
+            go_back()
+    with col2:
+        if st.button("Next"):
+            next_step()
 
 # --- Step 4: Select Budget ---
 elif st.session_state.step == 4:
-    st.markdown('<div class="container">', unsafe_allow_html=True)
-    st.subheader("💰 What's your budget?")
-    budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & Up"])
+    st.image("3.png", use_column_width=True)  # ✅ Budget Selection UI
+    budget = st.radio("", ["Under $25", "$25 & Up", "$75 & Up"])
     st.session_state.budget = budget  # Store budget selection
-    if st.button("See My Product Recommendation"):
-        next_step()
-    if st.button("Back"):
-        go_back()
-    st.markdown("</div>", unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Back"):
+            go_back()
+    with col2:
+        if st.button("See My Product Recommendation"):
+            next_step()
 
 # --- Step 5: Show Product Recommendations ---
 elif st.session_state.step == 5:
@@ -179,18 +110,17 @@ elif st.session_state.step == 5:
         (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())
     ]
 
-    st.markdown('<div class="container">', unsafe_allow_html=True)
+    st.image("5.png", use_column_width=True)  # ✅ Product Recommendation UI
 
     if not result.empty:
-        st.subheader(f"✨ Recommended Products for **{st.session_state.hair_issue}** ✨")
+        st.markdown(f"<h2 style='text-align: center;'>Recommended Products for {st.session_state.hair_issue}</h2>", unsafe_allow_html=True)
         st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
 
-        # Extract and display recommended products properly
         product_text = result.iloc[0]['Recommended Product & Link']
 
-        # Ensure proper formatting and display
-        if "](" in product_text:
-            formatted_products = product_text.replace(", ", "\n🔹 ")
+        # Format product recommendations properly
+        if "](" in product_text:  # Check if there are links
+            formatted_products = product_text.replace(", ", "\n🔹 ")  # Bullet points for list
             st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
         else:
             st.write(f"🔹 {product_text}")
@@ -198,8 +128,13 @@ elif st.session_state.step == 5:
     else:
         st.warning("❌ No product found for the selected budget.")
 
-    if st.button("Start Over"):
-        st.session_state.step = 1
-    st.markdown("</div>", unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Back"):
+            go_back()
+    with col2:
+        if st.button("Start Over"):
+            st.session_state.step = 1
+
 
 
