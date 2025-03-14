@@ -1,15 +1,11 @@
 import streamlit as st
 import pandas as pd
-import os
 
 # ✅ Load the latest dataset
-csv_file = "Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv"
-if os.path.exists(csv_file):
-    df = pd.read_csv(csv_file)
-    df.columns = df.columns.str.strip()  # Ensure column names are clean
-else:
-    st.error("❌ Data file not found. Please upload 'Updated_Hair_Issues_Dataset.csv'.")
-    st.stop()
+df = pd.read_csv("Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv")
+
+# ✅ Ensure column names are clean
+df.columns = df.columns.str.strip()
 
 # ✅ Initialize session state
 if "step" not in st.session_state:
@@ -23,14 +19,7 @@ def next_step():
 def go_back():
     st.session_state.step -= 1
 
-# Function to display images safely
-def show_image(image_path):
-    if os.path.exists(image_path):
-        st.image(image_path, use_container_width=True)
-    else:
-        st.warning(f"⚠️ Missing image: {image_path}")
-
-# --- 🎨 Custom Styling for Dark Mode & UI ---
+# --- 🎨 Custom Styling for Dark Mode ---
 st.markdown(
     """
     <style>
@@ -41,7 +30,6 @@ st.markdown(
         h1, h2, h3, .stSelectbox label, .stRadio label {
             color: white;
             font-family: 'Arial', sans-serif;
-            text-align: center;
         }
         .stRadio div {
             color: white !important;  /* ✅ Fixes budget text visibility */
@@ -60,54 +48,54 @@ st.markdown(
 
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
-    show_image("1.png")  # ✅ Welcome Screen UI
-    if st.button("Start"):
+    st.image("Screenshot 2025-03-11 221723.png", width=250)  # ✅ Logo added
+    st.title("Welcome to Hi Voltage Visuals:")
+    st.title("Hair Care Edition⚡")
+    st.write("✨Find the best hair care recommendations for your budget by answering a few quick questions✨")
+    if st.button("Get Started"):
         next_step()
+
+
 
 # --- Step 2: Choose Hair Concern ---
 elif st.session_state.step == 2:
-    show_image("2.png")  # ✅ Hair Concern Selection UI
-    hair_issue = st.selectbox("", df["Issue"].unique())
+    st.subheader("🔍 What's your hair concern?")
+    hair_issue = st.selectbox("Choose your hair issue with the dropdown menu:", df["Issue"].unique())
     st.session_state.hair_issue = hair_issue  # Store choice in session state
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Back"):
-            go_back()
-    with col2:
-        if st.button("Next"):
-            next_step()
+    if st.button("Next"):
+        next_step()
+    if st.button("Back"):
+        go_back()
 
 # --- Step 3: Show Cause & Solution ---
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
-    show_image("4.png")  # ✅ Understanding Your Hair UI
 
-    st.markdown(f"<h2 style='text-align: center;'>Understanding {issue_data['Issue']}</h2>", unsafe_allow_html=True)
+    st.subheader(f"💡 Understanding **{issue_data['Issue']}**")
     st.write(f"📖 **Definition:** {issue_data['Definition']}")
     st.write(f"⚠️ **Cause:** {issue_data['Cause']}")
-    st.write("🛠 **Solution:**")
-    st.write(issue_data["Solution"])
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Back"):
-            go_back()
-    with col2:
-        if st.button("Next"):
-            next_step()
+    # Ensure "Solution" exists to prevent errors
+    if "Solution" in df.columns:
+        st.write("🛠 **Solution:**")
+        st.write(issue_data["Solution"])
+    else:
+        st.write("🛠 **Solution:** No solution available. Please update dataset.")
+
+    if st.button("Next"):
+        next_step()
+    if st.button("Back"):
+        go_back()
 
 # --- Step 4: Select Budget ---
 elif st.session_state.step == 4:
-    show_image("3.png")  # ✅ Budget Selection UI
-    budget = st.radio("", ["Under $25", "$25 & Up", "$75 & Up"])
+    st.subheader("💰 What's your budget?")
+    budget = st.radio("Select your budget:", ["Under $25", "$25 & Up", "$75 & Up"])
     st.session_state.budget = budget  # Store budget selection
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Back"):
-            go_back()
-    with col2:
-        if st.button("See My Product Recommendation"):
-            next_step()
+    if st.button("See My Product Recommendation"):
+        next_step()
+    if st.button("Back"):
+        go_back()
 
 # --- Step 5: Show Product Recommendations ---
 elif st.session_state.step == 5:
@@ -116,31 +104,22 @@ elif st.session_state.step == 5:
         (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())
     ]
 
-    show_image("5.png")  # ✅ Product Recommendation UI
-
     if not result.empty:
-        st.markdown(f"<h2 style='text-align: center;'>Recommended Products for {st.session_state.hair_issue}</h2>", unsafe_allow_html=True)
+        st.subheader(f"✨ Recommended Products for **{st.session_state.hair_issue}** ✨")
         st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
+        st.write(f"🛍 Click the Link to Purchase")
+        # Extract and display recommended products properly
+        product_text = result.iloc[0]['Recommended Product & Link']  # Get full product string
 
-        product_text = result.iloc[0]['Recommended Product & Link']
-
-        # Format product recommendations properly
-        if "](" in product_text:  # Check if there are links
-            formatted_products = product_text.replace(", ", "\n🔹 ")  # Bullet points for list
+        # Ensure proper formatting and display
+        if "](" in product_text:  # Check if there are links in the string
+            formatted_products = product_text.replace(", ", "\n🔹 ")  # Add bullet points correctly
             st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
         else:
-            st.write(f"🔹 {product_text}")
+            st.write(f"🔹 {product_text}")  # If no links, display as plain text
 
     else:
         st.warning("❌ No product found for the selected budget.")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Back"):
-            go_back()
-    with col2:
-        if st.button("Start Over"):
-            st.session_state.step = 1
-
-
-
+    if st.button("Start Over"):
+        st.session_state.step = 1
