@@ -48,98 +48,12 @@ st.markdown(
 
 # --- Step 1: Welcome Page ---
 if st.session_state.step == 1:
-    st.markdown(
-        """
-        <style>
-            /* Center Content */
-            .container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            
-            /* Canva-Inspired Box Styling */
-            .box {
-                position: relative;
-                width: 90%;
-                max-width: 600px;
-                padding-top: 56.25%; /* 16:9 Aspect Ratio */
-                box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);
-                margin-top: 1.6em;
-                margin-bottom: 0.9em;
-                overflow: hidden;
-                border-radius: 8px;
-                will-change: transform;
-            }
-
-            /* Embedded Iframe */
-            .box iframe {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                border: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            /* Styled Button */
-            .styled-button {
-                display: inline-block;
-                background: #FFD700;
-                color: black;
-                font-weight: bold;
-                padding: 15px 20px;
-                border-radius: 10px;
-                font-size: 18px;
-                text-decoration: none;
-                transition: 0.3s;
-                border: 2px solid white;
-            }
-
-            .styled-button:hover {
-                background: #FFA500;
-                color: white;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Centered Content
-    st.markdown('<div class="container">', unsafe_allow_html=True)
-
-    # Logo
-    st.image("Screenshot 2025-03-11 221723.png", width=250)
-
-    # Title
-    st.markdown("<h1>Welcome to Hi Voltage Visuals:</h1>", unsafe_allow_html=True)
-    st.markdown("<h2>Hair Care Edition ⚡</h2>", unsafe_allow_html=True)
-
-    # Description
-    st.markdown(
-        "<p style='font-size:18px;'>✨Find the best hair care recommendations for your budget by answering a few quick questions✨</p>",
-        unsafe_allow_html=True
-    )
-
-    # Canva-Inspired Box (Could be replaced with an image, video, or anything)
-    st.markdown(
-        """
-        <div class="box">
-            <iframe loading="lazy" src="https://www.canva.com/design/DAGho8qhctc/23YwUzPGRMC1ixptB2JEqA/view?embed" allowfullscreen></iframe>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Get Started Button
+    st.image("Screenshot 2025-03-11 221723.png", width=250)  # ✅ Logo added
+    st.title("Welcome to Hi Voltage Visuals:")
+    st.title("Hair Care Edition⚡")
+    st.write("✨Find the best hair care recommendations for your budget by answering a few quick questions✨")
     if st.button("Get Started"):
         next_step()
-
-    # End Centered Content
-    st.markdown("</div>", unsafe_allow_html=True)
 
 
 
