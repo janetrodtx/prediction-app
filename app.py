@@ -75,24 +75,41 @@ elif st.session_state.step == 2:
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
 
-    # ✅ Custom CSS to set the background image
+    # ✅ Custom CSS to set and scale the background image properly
     st.markdown(
         f"""
         <style>
             .stApp {{
                 background: url("back1.png") no-repeat center center fixed;
-                background-size: cover;
+                background-size: contain; /* Ensures the full image is visible */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                padding-top: 50px;
+            }}
+            .content-container {{
+                background: rgba(0, 0, 0, 0.7); /* Adds a subtle background to improve readability */
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                max-width: 800px;
+                margin: auto;
+            }}
+            h2, p {{
+                color: white;
+                font-family: 'Arial', sans-serif;
             }}
         </style>
+        <div class='content-container'>
+            <h2>Understanding {issue_data['Issue']}</h2>
+            <p>📖 <b>Definition:</b> {issue_data['Definition']}</p>
+            <p>⚠️ <b>Cause:</b> {issue_data['Cause']}</p>
+            <p>🛠 <b>Solution:</b> {issue_data['Solution']}</p>
+        </div>
         """,
         unsafe_allow_html=True
     )
-
-    st.markdown(f"<h2 style='text-align: center; color: white;'>Understanding {issue_data['Issue']}</h2>", unsafe_allow_html=True)
-    st.write(f"📖 **Definition:** {issue_data['Definition']}")
-    st.write(f"⚠️ **Cause:** {issue_data['Cause']}")
-    st.write("🛠 **Solution:**")
-    st.write(issue_data["Solution"])
 
     col1, col2 = st.columns(2)
     with col1:
