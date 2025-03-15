@@ -181,7 +181,7 @@ elif st.session_state.step == 5:
             }
             .product-text {
                 position: absolute;
-                top: 40%; /* Adjust this to move text up or down */
+                top: 55%; /* Adjust this to move text up or down */
                 left: 50%;
                 transform: translate(-50%, -50%);
                 color: white;
