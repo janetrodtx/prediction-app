@@ -161,23 +161,65 @@ elif st.session_state.step == 5:
         (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())
     ]
 
-    if not result.empty:
-        st.subheader(f"✨ Recommended Products for **{st.session_state.hair_issue}** ✨")
-        st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
-        st.write(f"🛍 Click the Link to Purchase")
-        # Extract and display recommended products properly
-        product_text = result.iloc[0]['Recommended Product & Link']  # Get full product string
+    # ✅ CSS for overlaying text on the image
+    st.markdown(
+        """
+        <style>
+            .container {
+                position: relative;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .image {
+                width: 80%; /* Adjust image size */
+                height: auto;
+                display: block;
+            }
+            .overlay-text {
+                position: absolute;
+                top: 50%;  /* Moves text UP/DOWN */
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 30px;
+                font-weight: bold;
+                color: white;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+                font-family: 'Arial', sans-serif;
+            }
+        </style>
+        <div class="container">
+            <img src="back2.png" class="image">
+            <div class="overlay-text">Recommended Products for {}</div>
+        </div>
+        """.format(st.session_state.hair_issue),
+        unsafe_allow_html=True
+    )
 
-        # Ensure proper formatting and display
-        if "](" in product_text:  # Check if there are links in the string
-            formatted_products = product_text.replace(", ", "\n🔹 ")  # Add bullet points correctly
-            st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
+    # Budget and product recommendations
+    if not result.empty:
+        st.markdown(f"<h3 style='text-align: center; color: white;'>💰 <b>Budget:</b> {result.iloc[0]['Budget']}</h3>", unsafe_allow_html=True)
+
+        product_text = result.iloc[0]['Recommended Product & Link']
+
+        if "](" in product_text:  # Check if there are links
+            formatted_products = product_text.replace(", ", "<br>🔹 ")  # Bullet points for list
+            st.markdown(f"<p style='text-align: center; font-size: 18px; color: white;'>🔹 {formatted_products}</p>", unsafe_allow_html=True)
         else:
-            st.write(f"🔹 {product_text}")  # If no links, display as plain text
+            st.markdown(f"<p style='text-align: center; font-size: 18px; color: white;'>🔹 {product_text}</p>", unsafe_allow_html=True)
 
     else:
         st.warning("❌ No product found for the selected budget.")
 
-    if st.button("Start Over"):
-        st.session_state.step = 1
+    # Navigation buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Back"):
+            go_back()
+    with col2:
+        if st.button("Start Over"):
+            st.session_state.step = 1
+
 
