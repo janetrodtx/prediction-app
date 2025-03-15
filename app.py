@@ -92,16 +92,33 @@ elif st.session_state.step == 3:
 
 # --- Step 4: Select Budget ---
 elif st.session_state.step == 4:
-    st.image("budget.png", use_column_width=True)  # ✅ Budget Selection UI
-    budget = st.radio("", ["Under $25", "$25 & Up", "$75 & Up"])
-    st.session_state.budget = budget  # Store budget selection
-    col1, col2 = st.columns(2)
+    st.image("budget.png", use_container_width=True)  # ✅ Budget Selection UI
+
+    # Create three columns for budget options
+    col1, col2, col3 = st.columns(3)
+
     with col1:
-        if st.button("Back"):
-            go_back()
-    with col2:
-        if st.button("See My Product Recommendation"):
+        st.image("under25.png", width=150)  # ✅ Display Under $25 image
+        if st.button("Under $25"):
+            st.session_state.budget = "Under $25"
             next_step()
+
+    with col2:
+        st.image("25nup.png", width=150)  # ✅ Display $25 & Up image
+        if st.button("$25 & Up"):
+            st.session_state.budget = "$25 & Up"
+            next_step()
+
+    with col3:
+        st.image("75nup.png", width=150)  # ✅ Display $75 & Up image
+        if st.button("$75 & Up"):
+            st.session_state.budget = "$75 & Up"
+            next_step()
+
+    # Back button at the bottom
+    if st.button("Back"):
+        go_back()
+
 
 # --- Step 5: Show Product Recommendations ---
 elif st.session_state.step == 5:
