@@ -98,22 +98,22 @@ elif st.session_state.step == 4:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.image("under25.png", width=150)  # ✅ Display Under $25 image
-        if st.button("Under $25"):
+        if st.button("", key="under25"):  # Invisible button for clicking the image
             st.session_state.budget = "Under $25"
             next_step()
+        st.image("under25.png", width=150)  # ✅ Display Under $25 image (clickable)
 
     with col2:
-        st.image("25nup.png", width=150)  # ✅ Display $25 & Up image
-        if st.button("$25 & Up"):
+        if st.button("", key="25nup"):
             st.session_state.budget = "$25 & Up"
             next_step()
+        st.image("25nup.png", width=150)  # ✅ Display $25 & Up image (clickable)
 
     with col3:
-        st.image("75nup.png", width=150)  # ✅ Display $75 & Up image
-        if st.button("$75 & Up"):
+        if st.button("", key="75nup"):
             st.session_state.budget = "$75 & Up"
             next_step()
+        st.image("75nup.png", width=150)  # ✅ Display $75 & Up image (clickable)
 
     # Back button at the bottom
     if st.button("Back"):
