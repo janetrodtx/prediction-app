@@ -75,13 +75,16 @@ elif st.session_state.step == 2:
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
 
-    # ✅ Custom CSS to set and scale the background image properly
+    # ✅ Custom CSS to fix background size and center content properly
     st.markdown(
         f"""
         <style>
             .stApp {{
                 background: url("back1.png") no-repeat center center fixed;
-                background-size: contain; /* Ensures the full image is visible */
+                background-size: 90% auto; /* Scales image width to 90% while keeping proportions */
+                background-position: center;
+                background-attachment: fixed;
+                background-repeat: no-repeat;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -89,11 +92,11 @@ elif st.session_state.step == 3:
                 padding-top: 50px;
             }}
             .content-container {{
-                background: rgba(0, 0, 0, 0.7); /* Adds a subtle background to improve readability */
+                background: rgba(0, 0, 0, 0.6); /* Slight transparency for better text visibility */
                 padding: 20px;
                 border-radius: 10px;
                 text-align: center;
-                max-width: 800px;
+                max-width: 700px;
                 margin: auto;
             }}
             h2, p {{
@@ -118,6 +121,7 @@ elif st.session_state.step == 3:
     with col2:
         if st.button("Next"):
             next_step()
+
 
 # --- Step 4: Select Budget ---
 elif st.session_state.step == 4:
