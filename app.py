@@ -74,9 +74,21 @@ elif st.session_state.step == 2:
 # --- Step 3: Show Cause & Solution ---
 elif st.session_state.step == 3:
     issue_data = df[df["Issue"] == st.session_state.hair_issue].iloc[0]
-    st.image("back1.png", use_column_width=True)  # ✅ Understanding Your Hair UI
 
-    st.markdown(f"<h2 style='text-align: center;'>Understanding {issue_data['Issue']}</h2>", unsafe_allow_html=True)
+    # ✅ Custom CSS to set the background image
+    st.markdown(
+        f"""
+        <style>
+            .stApp {{
+                background: url("back1.png") no-repeat center center fixed;
+                background-size: cover;
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(f"<h2 style='text-align: center; color: white;'>Understanding {issue_data['Issue']}</h2>", unsafe_allow_html=True)
     st.write(f"📖 **Definition:** {issue_data['Definition']}")
     st.write(f"⚠️ **Cause:** {issue_data['Cause']}")
     st.write("🛠 **Solution:**")
