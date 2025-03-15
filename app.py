@@ -163,7 +163,7 @@ elif st.session_state.step == 5:
 
     # ✅ CSS for overlaying text on the image
     st.markdown(
-        """
+      
         <style>
             .container {
                 position: relative;
