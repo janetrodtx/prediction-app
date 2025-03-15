@@ -98,26 +98,24 @@ elif st.session_state.step == 4:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        if st.button("", key="under25"):  # Invisible button for clicking the image
-            st.session_state.budget = "Under $25"
-            next_step()
-        st.image("under25.png", width=150)  # ✅ Display Under $25 image (clickable)
-
+        st.image("under25.png", width=150)  # ✅ Display Under $25 image
     with col2:
-        if st.button("", key="25nup"):
-            st.session_state.budget = "$25 & Up"
-            next_step()
-        st.image("25nup.png", width=150)  # ✅ Display $25 & Up image (clickable)
-
+        st.image("25nup.png", width=150)  # ✅ Display $25 & Up image
     with col3:
-        if st.button("", key="75nup"):
-            st.session_state.budget = "$75 & Up"
-            next_step()
-        st.image("75nup.png", width=150)  # ✅ Display $75 & Up image (clickable)
+        st.image("75nup.png", width=150)  # ✅ Display $75 & Up image
 
-    # Back button at the bottom
-    if st.button("Back"):
-        go_back()
+    # Budget selection as radio buttons
+    budget = st.radio("Select Your Budget:", ["Under $25", "$25 & Up", "$75 & Up"], horizontal=True)
+    st.session_state.budget = budget
+
+    # Navigation buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Back"):
+            go_back()
+    with col2:
+        if st.button("See My Product Recommendation"):
+            next_step()
 
 
 # --- Step 5: Show Product Recommendations ---
