@@ -1,3 +1,6 @@
+import streamlit as st
+import pandas as pd
+
 # ✅ Load the latest dataset
 df = pd.read_csv("Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv")
 
