@@ -1,6 +1,3 @@
-import streamlit as st
-import pandas as pd
-
 # ✅ Load the latest dataset
 df = pd.read_csv("Updated_Hair_Issues_Dataset - Updated_Hair_Issues_Dataset.csv.csv")
 
@@ -163,49 +160,18 @@ elif st.session_state.step == 5:
         (df["Budget"].str.lower().str.strip() == st.session_state.budget.lower().strip())
     ]
 
-    st.markdown(
-        """
-        <style>
-            .product-container {
-                position: relative;
-                text-align: center;
-                width: 100%;
-            }
-            .product-container img {
-                display: block;
-                margin: auto;
-                width: 80%; /* Adjusts the image width */
-            }
-            .product-text {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                color: white;
-                font-size: 22px;
-                font-weight: bold;
-                font-family: 'Arial', sans-serif;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown('<div class="product-container">', unsafe_allow_html=True)
-    st.image("back2.png", use_container_width=True)
-    st.markdown(f'<div class="product-text">Recommended Products for {st.session_state.hair_issue}</div>', unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.image("back2.png", use_column_width=True)  # ✅ Product Recommendation UI
 
     if not result.empty:
-        st.markdown(f"<h3 style='text-align: center;'>💰 <b>Budget:</b> {result.iloc[0]['Budget']}</h3>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center;'>Recommended Products for {st.session_state.hair_issue}</h2>", unsafe_allow_html=True)
+        st.write(f"💰 **Budget:** {result.iloc[0]['Budget']}")
 
-        # Extract and format product recommendations
         product_text = result.iloc[0]['Recommended Product & Link']
 
+        # Format product recommendations properly
         if "](" in product_text:  # Check if there are links
-            formatted_products = product_text.replace(", ", "<br>🔹 ")  # Bullet points for list
-            st.markdown(f"<p style='text-align: center;'>🔹 {formatted_products}</p>", unsafe_allow_html=True)
+            formatted_products = product_text.replace(", ", "\n🔹 ")  # Bullet points for list
+            st.markdown(f"🔹 {formatted_products}", unsafe_allow_html=True)
         else:
             st.write(f"🔹 {product_text}")
 
