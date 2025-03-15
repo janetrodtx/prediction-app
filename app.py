@@ -194,7 +194,7 @@ elif st.session_state.step == 5:
             <img src="back2.png" class="image">
             <div class="overlay-text">Recommended Products for {}</div>
         </div>
-        """.format(st.session_state.hair_issue),
+        .format(st.session_state.hair_issue),
         unsafe_allow_html=True
     )
 
